@@ -1,12 +1,12 @@
-# AxlsxDsl
+# Axlsx DSL
 
-TODO: Write a gem description
+axlsx-dsl provides sugar syntax and stylesheet helpers for axlsx
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'axlsx_dsl'
+    gem 'axlsx-dsl'
 
 And then execute:
 
@@ -14,11 +14,11 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install axlsx_dsl
+    $ gem install axlsx-dsl
 
 ## Usage
 
-TODO: Write usage instructions here
+    require 'axlsx/dsl'
 
 ## Contributing
 
