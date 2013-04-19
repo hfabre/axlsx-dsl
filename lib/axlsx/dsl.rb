@@ -2,7 +2,7 @@ require 'axlsx/dsl/version'
 
 module Axlsx::DSL
 
-  autoload :Stylesheet, 'dsl/stylesheet'
+  autoload :StyleSheet, 'dsl/style_sheet'
   autoload :Sheet,      'dsl/sheet'
   autoload :Row,        'dsl/row'
   autoload :Cell,       'dsl/cell'
