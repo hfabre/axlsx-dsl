@@ -5,6 +5,8 @@ module Axlsx::DSL
     class LookupError < StandardError
     end
 
+    SEPARATOR = '+'
+
     def initialize(workbook)
       @styles = {}
       @defs = {}
@@ -12,7 +14,7 @@ module Axlsx::DSL
     end
 
     def register_style(name, style)
-      raise ArgumentError.new("name already taken #{name}") if
+      raise ArgumentError.new("style name already taken #{name}") if
         @styles.include?(name)
       if ext = style.delete(:extend)
         exts = Array[ext].flatten
@@ -28,7 +30,7 @@ module Axlsx::DSL
     alias_method :[]=, :register_style
 
     def composed_style(keys)
-      key = keys.join("+")
+      key = keys.join(SEPARATOR)
       return @styles[key] if @styles.has_key?(key)
       style = keys.inject({}) do |h, k|
         s = @defs[k] or raise LookupError.new(k.inspect)
