@@ -4,6 +4,7 @@ module Axlsx::DSL
 
     LOCAL_OPTIONS = [:style]
 
+    attr_reader :style
     attr_reader :xrow
     attr_reader :cells, :xcells
 
@@ -23,7 +24,7 @@ module Axlsx::DSL
       @cells = []
       cells.each{|c| cell(c)}
       yield self if block_given?
-      @xrow = render(@sheet)
+      @xrow = render
     end
 
     def xcells
@@ -31,7 +32,7 @@ module Axlsx::DSL
     end
 
     def cell(*args, &block)
-      @cells.append Cell.new(self, *args, &block)
+      @cells.push Cell.new(self, *args, &block)
     end
 
     def size
@@ -54,14 +55,14 @@ module Axlsx::DSL
 
   protected
 
-    def render(sheet)
-      xstyles = styles.map{|s| sheet.stylesheet.style(s) unless s.blank?}
-      row = sheet.worksheet.add_row(to_a, @xoptions.merge(:style => xstyles))
+    def render
+      xstyles = styles.map{|s| @sheet.style.lookup(s) unless s.blank?}
+      row = @sheet.add_row(to_a, @xoptions.merge(:style => xstyles))
       @cells.inject(0) do |offset, cell|
-        if cell.row_span > 1 || cell.col_span > 1
+        if cell.row_span > 1
           cell_refs = row.cells[offset..(offset + cell.row_span - 1)]
           cell.bind(cell_refs)
-          sheet.worksheet.merge_cells cell_refs
+          @sheet.merge_cells cell_refs
         else
           cell.bind([row.cells[offset]])
         end

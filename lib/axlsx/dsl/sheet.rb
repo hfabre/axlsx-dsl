@@ -1,19 +1,21 @@
 module Axlsx::DSL
 
   class Sheet
-    attr_reader :worksheet
-    attr_reader :stylesheet
+    attr_reader :xworkbook
+    attr_reader :xworksheet
+    attr_reader :style
     attr_reader :rows
 
-    delegate :merge_cells, :to => :@worksheet
+    delegate :merge_cells, :add_row, :name, :name=,
+      :to => :@xworksheet
 
-    def initialize(worksheet, stylesheet)
-      @worksheet = worksheet
-      @stylesheet = stylesheet
+    def initialize(xworkbook, stylesheet, options={})
+      @xworkbook = xworkbook
+      @xworksheet = @xworkbook.add_worksheet
+      @xworksheet.name = options[:name] if options[:name]
+      @style = stylesheet
       @rows = []
     end
-
-    alias_method :ss, :stylesheet
 
     def row(*args, &block)
       r = Row.new(self, *args, &block)
@@ -22,7 +24,7 @@ module Axlsx::DSL
     end
 
     def image(img_path, width, height, left, right)
-      @worksheet.add_image( :image_src => img_path ) do |image|
+      @xworksheet.add_image( :image_src => img_path ) do |image|
         image.width = width
         image.height = height
         image.start_at left, right

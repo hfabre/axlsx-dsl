@@ -1,21 +1,19 @@
 module Axlsx::DSL
 
   class Cell
-    attr_reader :row_span, :col_span
+    attr_reader :style
+    attr_reader :row_span
     attr_accessor :content
-
     attr_reader :xcell, :xcells
-    attr_reader :options, :xoptions
 
     delegate :r, :pos, :to => :@xcell
 
     def initialize(row, *content, &block)
       options = content.extract_options!
-      @options = options
+      @style = Array[options[:style]].flatten.compact
       @content = content.first
       @row = row
-      @row_span = @options[:row_span] || 1
-      @col_span = @options[:col_span] || 1
+      @row_span = options[:row_span] || 1
       @cell = nil
       yield self if block_given?
     end
@@ -32,7 +30,7 @@ module Axlsx::DSL
     end
 
     def styles
-      Array.new(row_span) { @options[:style] }
+      Array.new(row_span) { @style }
     end
   end
 

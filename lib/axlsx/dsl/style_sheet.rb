@@ -29,16 +29,6 @@ module Axlsx::DSL
 
     alias_method :[]=, :register
 
-    def lookup_composed(keys)
-      key = keys.join(SEPARATOR)
-      return @store[key] if @store.has_key?(key)
-      style = keys.inject({}) do |h, k|
-        s = @defs[k] or raise LookupError.new(k.inspect)
-        h.merge s
-      end
-      register(key, style)
-    end
-
     def lookup(keys)
       if keys.kind_of?(Array)
         if keys.size > 1
@@ -51,6 +41,19 @@ module Axlsx::DSL
     end
 
     alias_method :[], :lookup
+
+  protected
+
+    def lookup_composed(keys)
+      key = keys.join(SEPARATOR)
+      return @store[key] if @store.has_key?(key)
+      style = keys.inject({}) do |h, k|
+        s = @defs[k] or raise LookupError.new(k.inspect)
+        h.merge s
+      end
+      register(key, style)
+    end
+
   end
 
 end

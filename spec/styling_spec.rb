@@ -42,4 +42,32 @@ describe "Axlsx DSL Styling" do
 
   end
 
+  describe "using" do
+
+    before do
+      @style[:strong] = {:b => true}
+      @style[:date] = {:format_code=> "DD/MM/YYYY"}
+
+      @sheet = Axlsx::DSL::Sheet.new(@workbook, @style)
+    end
+
+    describe "cells" do
+
+      it "has a style" do
+
+        row = @sheet.row do |r|
+          r.cell :style => :strong
+        end
+
+        row.cells.first.style.should eq([:strong])
+      end
+
+    end
+
+    describe "rows" do
+      it "has default style for each cell"
+    end
+
+  end
+
 end
