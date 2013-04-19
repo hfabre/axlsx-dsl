@@ -1,4 +1,4 @@
-Copyright (c) 2013 Antonin Amand
+Copyright (c) 2013 Le Wattman <dev@lewattman.com>
 
 MIT License
 
