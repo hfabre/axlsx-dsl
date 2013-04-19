@@ -8,14 +8,14 @@ module Axlsx::DSL
     SEPARATOR = '+'
 
     def initialize(workbook)
-      @styles = {}
+      @store = {}
       @defs = {}
       @workbook = workbook
     end
 
-    def register_style(name, style)
+    def register(name, style)
       raise ArgumentError.new("style name already taken #{name}") if
-        @styles.include?(name)
+        @store.include?(name)
       if ext = style.delete(:extend)
         exts = Array[ext].flatten
         style = exts.inject(style) do |s, e|
@@ -24,33 +24,33 @@ module Axlsx::DSL
         end
       end
       @defs[name] = style
-      @styles[name] = @workbook.styles.add_style(style)
+      @store[name] = @workbook.styles.add_style(style)
     end
 
-    alias_method :[]=, :register_style
+    alias_method :[]=, :register
 
-    def composed_style(keys)
+    def lookup_composed(keys)
       key = keys.join(SEPARATOR)
-      return @styles[key] if @styles.has_key?(key)
+      return @store[key] if @store.has_key?(key)
       style = keys.inject({}) do |h, k|
         s = @defs[k] or raise LookupError.new(k.inspect)
         h.merge s
       end
-      register_style(key, style)
+      register(key, style)
     end
 
-    def style(keys)
+    def lookup(keys)
       if keys.kind_of?(Array)
         if keys.size > 1
-          return composed_style(keys)
+          return lookup_composed(keys)
         else
-          return style(keys.first)
+          return lookup(keys.first)
         end
       end
-      @styles[keys] or raise LookupError.new(keys.inspect)
+      @store[keys] or raise LookupError.new(keys.inspect)
     end
 
-    alias_method :[], :style
+    alias_method :[], :lookup
   end
 
 end
