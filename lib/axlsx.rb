@@ -1,2 +1,2 @@
-module Axlsx  
+module Axlsx
 end
