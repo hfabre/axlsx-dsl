@@ -11,4 +11,5 @@ RSpec.configure do |config|
 end
 
 require 'axlsx/dsl'
-require 'axlsx'
+require 'debugger'
+

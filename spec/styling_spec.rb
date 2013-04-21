@@ -59,13 +59,21 @@ describe "Axlsx DSL Styling" do
           r.cell :style => :strong
         end
 
-        row.cells.first.style.should eq([:strong])
+        row.xcells.first.style.should eq(@style[:strong])
       end
 
     end
 
     describe "rows" do
-      it "has default style for each cell"
+      it "has default style for each cell" do
+        row = @sheet.row(:style => :strong) do |r|
+          r.cell :style => :date
+          r.cell
+        end
+
+        row.xcells.first.style.should eq(@style.lookup([:strong, :date]))
+        row.xcells.last.style.should eq(@style[:strong])
+      end
     end
 
   end
