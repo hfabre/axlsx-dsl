@@ -26,9 +26,9 @@ describe "Axlsx DSL Styling" do
     before do
       @style[:strong] = {:b => true}
       @style[:date] = {:format_code=> "DD/MM/YYYY"}
-      @style.register([:strong, :date], {
+      @style.register([:strong, :date],
         :b => true,
-        :format_code=> "DD/MM/YYYY"})
+        :format_code=> "DD/MM/YYYY")
     end
 
     it "looks up simple styles" do
@@ -66,9 +66,9 @@ describe "Axlsx DSL Styling" do
 
     describe "rows" do
       it "has default style for each cell" do
-        row = @sheet.row(:style => :strong) do |r|
-          r.cell :style => :date
-          r.cell
+        row = @sheet.row(:style => :strong) do
+          cell :style => :date
+          cell
         end
 
         row.xcells.first.style.should eq(@style.lookup([:strong, :date]))

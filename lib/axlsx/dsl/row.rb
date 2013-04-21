@@ -23,7 +23,7 @@ module Axlsx::DSL
       @sheet = sheet
       @cells = []
       cells.each{|c| cell(c)}
-      yield self if block_given?
+      instance_eval(&block) if block_given?
       @xrow = render
     end
 
