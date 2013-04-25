@@ -59,6 +59,7 @@ module Axlsx::DSL
       xstyles = styles.map{|s| @sheet.style.lookup(s) unless s.blank?}
       row = @sheet.add_row(to_a, @xoptions.merge(:style => xstyles))
       @cells.inject(0) do |offset, cell|
+        @sheet.add_ref(cell.alias, cell) unless cell.alias.nil?
         if cell.row_span > 1
           cell_refs = row.cells[offset..(offset + cell.row_span - 1)]
           cell.bind(cell_refs)

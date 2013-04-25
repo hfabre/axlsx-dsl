@@ -5,6 +5,7 @@ module Axlsx::DSL
     attr_reader :xworksheet
     attr_reader :style
     attr_reader :rows
+    attr_reader :refs
 
     delegate :merge_cells, :add_row, :name, :name=,
       :to => :@xworksheet
@@ -14,6 +15,7 @@ module Axlsx::DSL
       @xworksheet = @xworkbook.add_worksheet
       @xworksheet.name = options[:name] if options[:name]
       @style = stylesheet
+      @refs = {}
       @rows = []
     end
 
@@ -21,6 +23,11 @@ module Axlsx::DSL
       r = Row.new(self, *args, &block)
       @rows << r
       r
+    end
+
+    # add a reference to the cell
+    def add_ref(name, cell)
+      @refs[name.to_sym] = cell
     end
 
     def image(img_path, width, height, left, right)

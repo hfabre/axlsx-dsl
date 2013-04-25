@@ -5,6 +5,7 @@ module Axlsx::DSL
     attr_reader :row_span
     attr_accessor :content
     attr_reader :xcell, :xcells
+    attr_reader :alias
 
     delegate :r, :pos, :to => :@xcell
 
@@ -14,6 +15,7 @@ module Axlsx::DSL
       @content = content.first
       @row = row
       @row_span = options[:row_span] || 1
+      @alias = options.delete(:as)
       @cell = nil
       yield self if block_given?
     end

@@ -90,4 +90,27 @@ describe "Building Rows" do
     end
 
   end
+
+  describe "references" do
+    before do
+      @sheet.row do |r|
+        r.cell 'foo', :as => :foo
+        r.cell 'bar', :as => :bar
+      end
+    end
+
+    it "can retrieve references" do
+      @sheet.refs[:foo].r.should eq('A1')
+      @sheet.refs[:bar].r.should eq('B1')
+    end
+
+    it "keep the last one" do
+      @sheet.row do |r|
+        r.cell 'foo 2', :as => :foo
+        r.cell 'baz', :as => :baz
+      end
+
+      @sheet.refs[:foo].r.should eq('A2')
+    end
+  end
 end
