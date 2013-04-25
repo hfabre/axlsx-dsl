@@ -4,6 +4,7 @@ describe "Building Rows" do
     @workbook = @package.workbook
     @style = Axlsx::DSL::StyleSheet.new(@workbook)
     @sheet = Axlsx::DSL::Sheet.new(@workbook, @style)
+    @sheet2 = Axlsx::DSL::Sheet.new(@workbook, @style, :name => 'test2')
   end
 
   describe "a simple row" do
@@ -102,6 +103,8 @@ describe "Building Rows" do
     it "can retrieve references" do
       @sheet.refs[:foo].r.should eq('A1')
       @sheet.refs[:bar].r.should eq('B1')
+      @sheet.ref(:foo).should eq('A1')
+      @sheet.ref(:bar).should eq('B1')
     end
 
     it "keep the last one" do
@@ -111,6 +114,21 @@ describe "Building Rows" do
       end
 
       @sheet.refs[:foo].r.should eq('A2')
+      @sheet.ref(:foo).should eq('A2')
+      @sheet.refs[:baz].r.should eq('B2')
+      @sheet.ref(:baz).should eq('B2')
+    end
+
+    it "return nil if not found" do
+      @sheet.ref(:baz).should be_nil
+    end
+
+    it "can retrieve sheet scoped ref" do
+      @sheet2.row do |r|
+        r.cell 'foo', :as => :foo
+      end
+      @sheet.ref(:foo, true).should eq("'Sheet1'!A1")
+      @sheet2.ref(:foo, true).should eq("'test2'!A1")
     end
   end
 end

@@ -30,6 +30,20 @@ module Axlsx::DSL
       @refs[name.to_sym] = cell
     end
 
+    # get reference coordinates
+    def ref(name, abs=false)
+      cell = @refs[name.to_sym]
+      unless cell.nil?
+        if abs
+          "'#{@xworksheet.name}'!#{cell.r}"
+        else
+          cell.r
+        end
+      else
+        nil
+      end
+    end
+
     def image(img_path, width, height, left, right)
       @xworksheet.add_image( :image_src => img_path ) do |image|
         image.width = width

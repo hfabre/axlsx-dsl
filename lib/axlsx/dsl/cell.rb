@@ -7,7 +7,7 @@ module Axlsx::DSL
     attr_reader :xcell, :xcells
     attr_reader :alias
 
-    delegate :r, :pos, :to => :@xcell
+    delegate :r, :r_abs, :reference, :pos, :to => :@xcell
 
     def initialize(row, *content, &block)
       options = content.extract_options!
