@@ -4,7 +4,6 @@ describe "Building Rows" do
     @workbook = @package.workbook
     @style = Axlsx::DSL::StyleSheet.new(@workbook)
     @sheet = Axlsx::DSL::Sheet.new(@workbook, @style)
-    @sheet2 = Axlsx::DSL::Sheet.new(@workbook, @style, :name => 'test2')
   end
 
   describe "a simple row" do
@@ -124,11 +123,22 @@ describe "Building Rows" do
     end
 
     it "can retrieve sheet scoped ref" do
+      @sheet2 = Axlsx::DSL::Sheet.new(@workbook, @style, :name => 'test2')
       @sheet2.row do |r|
         r.cell 'foo', :as => :foo
       end
       @sheet.ref(:foo, true).should eq("'Sheet1'!A1")
       @sheet2.ref(:foo, true).should eq("'test2'!A1")
     end
+
+    it "has a block when content needs to be exec after creating the axlsx cell" do
+      row = @sheet.row do |r|
+        r.cell 'foo', :as => :foo
+        r.cell{ "=%s*100" % @sheet.ref(:foo) }
+      end
+
+      row.xcells.last.value.should eq('=A2*100')
+    end
+
   end
 end

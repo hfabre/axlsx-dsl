@@ -10,4 +10,5 @@ RSpec.configure do |config|
   config.order = 'random'
 end
 
+require 'axlsx'
 require 'axlsx/dsl'

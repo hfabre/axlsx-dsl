@@ -2,6 +2,10 @@
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
+
+module Axlsx
+end
+
 require 'axlsx/dsl/version'
 
 Gem::Specification.new do |spec|
@@ -23,6 +27,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
 
-  spec.add_runtime_dependency "axlsx", "~> 1.3.4"
+  spec.add_runtime_dependency "axlsx", "~> 1.3.5"
   spec.add_runtime_dependency "activesupport", "~> 3.2.11"
 end

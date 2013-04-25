@@ -7,7 +7,8 @@ module Axlsx::DSL
     attr_reader :xcell, :xcells
     attr_reader :alias
 
-    delegate :r, :r_abs, :reference, :pos, :to => :@xcell
+    delegate :value, :r, :r_abs, :reference, :pos,
+      :to => :@xcell
 
     def initialize(row, *content, &block)
       options = content.extract_options!
@@ -17,17 +18,22 @@ module Axlsx::DSL
       @row_span = options[:row_span] || 1
       @alias = options.delete(:as)
       @cell = nil
-      yield self if block_given?
+      @content = block if block_given?
     end
 
     def bind(xcells)
       @xcell = xcells.first
+      @xcell.value = if @content.respond_to?(:call)
+        @content.call
+      else
+        @content
+      end
       @xcells = xcells
     end
 
     def to_a
       a = Array.new(row_span)
-      a[0] = @content
+      a[0] = @content unless @content.respond_to?(:call)
       a
     end
 
