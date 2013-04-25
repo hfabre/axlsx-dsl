@@ -9,9 +9,9 @@ describe "Building Rows" do
   describe "a simple row" do
 
     before do
-      @row = @sheet.row do
-        cell 'foo'
-        cell 'bar'
+      @row = @sheet.row do |r|
+        r.cell 'foo'
+        r.cell 'bar'
       end
     end
 
@@ -51,9 +51,9 @@ describe "Building Rows" do
   describe "row spans" do
 
     it "spans to the right" do
-      row = @sheet.row do
-        cell
-        cell 'foo', :row_span => 3
+      row = @sheet.row do |r|
+        r.cell
+        r.cell 'foo', :row_span => 3
       end
 
       row.cells.size.should eq(2)
@@ -63,9 +63,9 @@ describe "Building Rows" do
     end
 
     it "spans from first cell" do
-      row = @sheet.row do
-        cell 'foo', :row_span => 3
-        cell 'bar'
+      row = @sheet.row do |r|
+        r.cell 'foo', :row_span => 3
+        r.cell 'bar'
       end
 
       row.cells.size.should eq(2)
@@ -75,11 +75,11 @@ describe "Building Rows" do
     end
 
     it "spans from the middle" do
-      row = @sheet.row do
-        cell 'foo'
-        cell 'bar', :row_span => 3
-        cell 'baz', :row_span => 2
-        cell
+      row = @sheet.row do |r|
+        r.cell 'foo'
+        r.cell 'bar', :row_span => 3
+        r.cell 'baz', :row_span => 2
+        r.cell
       end
       row.cells.size.should eq(4)
       row.xcells.size.should eq(7)

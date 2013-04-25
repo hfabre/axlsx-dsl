@@ -66,9 +66,9 @@ describe "Axlsx DSL Styling" do
 
     describe "rows" do
       it "has default style for each cell" do
-        row = @sheet.row(:style => :strong) do
-          cell :style => :date
-          cell
+        row = @sheet.row(:style => :strong) do |r|
+          r.cell :style => :date
+          r.cell
         end
 
         row.xcells.first.style.should eq(@style.lookup([:strong, :date]))
