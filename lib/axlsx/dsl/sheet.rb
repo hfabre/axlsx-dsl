@@ -7,7 +7,7 @@ module Axlsx::DSL
     attr_reader :rows
     attr_reader :refs
 
-    delegate :merge_cells, :add_row, :name, :name=,
+    delegate :merge_cells, :add_row, :add_image, :name, :name=,
       :to => :@xworksheet
 
     def initialize(xworkbook, stylesheet, options={})
@@ -50,6 +50,10 @@ module Axlsx::DSL
         image.height = height
         image.start_at left, right
       end
+    end
+
+    def inspect
+      "<#{self.class.name} #{object_id}>"
     end
 
   end

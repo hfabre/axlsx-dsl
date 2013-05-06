@@ -31,6 +31,10 @@ module Axlsx::DSL
       @xcells = xcells
     end
 
+    def inspect
+      "<#{self.class.name} #{@xcell.nil? ? '' : r}>"
+    end
+
     def to_a
       a = Array.new(row_span)
       a[0] = @content unless @content.respond_to?(:call)

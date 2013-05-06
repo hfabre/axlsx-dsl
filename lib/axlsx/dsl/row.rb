@@ -45,6 +45,10 @@ module Axlsx::DSL
       end
     end
 
+    def inspect
+      "<#{self.class.name}>"
+    end
+
     def styles
       @cells.inject([]) do |a, c|
         a += c.styles.map do |s|
