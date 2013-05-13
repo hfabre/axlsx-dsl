@@ -32,7 +32,9 @@ module Axlsx::DSL
     end
 
     def cell(*args, &block)
-      @cells.push Cell.new(self, *args, &block)
+      c = Cell.new(self, *args, &block)
+      @cells.push c
+      c
     end
 
     def size
