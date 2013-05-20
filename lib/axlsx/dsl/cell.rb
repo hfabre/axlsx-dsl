@@ -32,7 +32,7 @@ module Axlsx::DSL
     end
 
     def inspect
-      "<#{self.class.name} #{@xcell.nil? ? '' : r}>"
+      "<#{self.class.name} #{@xcell.nil? ? "0x#{object_id.to_s(16)}" : r}>"
     end
 
     def to_a

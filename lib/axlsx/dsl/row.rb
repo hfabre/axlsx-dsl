@@ -48,7 +48,7 @@ module Axlsx::DSL
     end
 
     def inspect
-      "<#{self.class.name}>"
+      "<#{self.class.name} 0x#{object_id.to_s(16)}>"
     end
 
     def styles

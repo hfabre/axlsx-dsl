@@ -6,6 +6,10 @@ describe "Building Rows" do
     @sheet = Axlsx::DSL::Sheet.new(@workbook, @style)
   end
 
+  it "has inspect method" do
+    @sheet.inspect.should_not be_empty
+  end
+
   describe "a simple row" do
 
     before do
@@ -30,6 +34,10 @@ describe "Building Rows" do
     end
 
     describe "cells" do
+
+      it "has inspect" do
+        @row.cells.first.inspect.should_not be_empty
+      end
 
       it "has coordinates" do
         @row.cells.first.r.should eq("A1")

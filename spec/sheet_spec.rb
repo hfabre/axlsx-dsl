@@ -20,4 +20,8 @@ describe Axlsx::DSL::Sheet do
     @sheet.xworksheet.name.should eq(name)
   end
 
+  it "has inspect method" do
+    @sheet.inspect.should_not be_empty
+  end
+
 end

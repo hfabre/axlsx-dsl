@@ -53,7 +53,7 @@ module Axlsx::DSL
     end
 
     def inspect
-      "<#{self.class.name} #{object_id}>"
+      "<#{self.class.name} 0x#{object_id.to_s(16)}>"
     end
 
   end
