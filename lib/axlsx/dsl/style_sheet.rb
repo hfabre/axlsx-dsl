@@ -5,26 +5,33 @@ module Axlsx::DSL
     class LookupError < StandardError
     end
 
+    DEFAULT_KEY = :__default__
     SEPARATOR = '+'
+    attr_reader :defs
 
-    def initialize(workbook)
+    def initialize(workbook, options={})
       @store = {}
       @defs = {}
       @workbook = workbook
+      store_style(DEFAULT_KEY, options[:default_style] || {})
+    end
+
+    def default_style
+      @defs[DEFAULT_KEY]
     end
 
     def register(name, style)
       raise ArgumentError.new("style name already taken #{name}") if
         @store.include?(name)
-      if ext = style.delete(:extend)
-        exts = Array[ext].flatten
-        style = exts.inject(style) do |s, e|
-          defn = @defs[e] or raise LookupError.new(k.inspect)
-          defn.merge(s)
-        end
+      exts = [DEFAULT_KEY]
+      if extends = style.delete(:extend)
+        exts += extends
       end
-      @defs[name] = style
-      @store[name] = @workbook.styles.add_style(style)
+      style = exts.inject({}) do |s, e|
+        defn = @defs[e] or raise LookupError.new(e.inspect)
+        s.deep_merge(defn)
+      end.deep_merge(style)
+      store_style name, style
     end
 
     alias_method :[]=, :register
@@ -43,6 +50,11 @@ module Axlsx::DSL
     alias_method :[], :lookup
 
   protected
+
+    def store_style(key, style)
+      @defs[key] = style
+      @store[key] = @workbook.styles.add_style(style.deep_dup)
+    end
 
     def lookup_composed(keys)
       key = keys.join(SEPARATOR)

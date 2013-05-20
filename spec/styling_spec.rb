@@ -8,6 +8,27 @@ describe "Axlsx DSL Styling" do
     @style = Axlsx::DSL::StyleSheet.new(@workbook)
   end
 
+  describe "default styles" do
+
+    before do
+      @style = Axlsx::DSL::StyleSheet.new(@workbook,
+        :default_style => {:font_name => 'Tahoma',
+                           :family => 1,
+                           :numFmt => 1})
+    end
+
+    it "reads default style" do
+      @style.register :strong, :b => true
+    end
+
+    it "is extended by all styles" do
+      @style.register :strong, :b => true, :numFmt => 2
+      @style.defs[:strong].should eq(
+        {:font_name => 'Tahoma', :family => 1, :b => true, :numFmt => 2})
+    end
+
+  end
+
   describe 'definitions' do
 
     it "defines simple styles" do
@@ -17,6 +38,20 @@ describe "Axlsx DSL Styling" do
     it "define composed styles" do
       @style.register([:strong, :date],
         {:b => true, :format_code=> "DD/MM/YYYY"})
+    end
+
+    describe "extends" do
+
+      it "merge in order" do
+        @style.register :one, :family => 1
+        @style.register :two, :font_name => 'Tahoma', :b => true
+        @style.register :three, :font_name => 'Helvetica'
+
+        @style.register :four, :extend => [:one, :two, :three], :b => false
+        @style.defs[:four].should eq(
+          {:family => 1, :font_name => 'Helvetica', :b => false})
+      end
+
     end
 
   end
@@ -45,6 +80,11 @@ describe "Axlsx DSL Styling" do
   describe "using" do
 
     before do
+      @style = Axlsx::DSL::StyleSheet.new(@workbook,
+        :default_style => {:font_name => 'Tahoma',
+                           :family => 1,
+                           :numFmt => 1})
+
       @style[:strong] = {:b => true}
       @style[:date] = {:format_code=> "DD/MM/YYYY"}
 
@@ -54,12 +94,21 @@ describe "Axlsx DSL Styling" do
     describe "cells" do
 
       it "has a style" do
-
         row = @sheet.row do |r|
           r.cell :style => :strong
         end
 
         row.xcells.first.style.should eq(@style[:strong])
+      end
+
+      it "is applied default style" do
+        row = @sheet.row do |r|
+          r.cell :style => :strong
+          r.cell
+        end
+
+        row.xcells.last.style.should eq(
+          @style[Axlsx::DSL::StyleSheet::DEFAULT_KEY])
       end
 
     end

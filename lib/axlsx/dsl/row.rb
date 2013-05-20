@@ -62,7 +62,13 @@ module Axlsx::DSL
   protected
 
     def render
-      xstyles = styles.map{|s| @sheet.style.lookup(s) unless s.blank?}
+      xstyles = styles.map do |s|
+        if s.blank?
+          @sheet.style.lookup(Axlsx::DSL::StyleSheet::DEFAULT_KEY)
+        else
+          @sheet.style.lookup(s)
+        end
+      end
       row = @sheet.add_row(to_a, @xoptions.merge(:style => xstyles))
       @cells.inject(0) do |offset, cell|
         @sheet.add_ref(cell.alias, cell) unless cell.alias.nil?
