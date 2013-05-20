@@ -24,9 +24,8 @@ module Axlsx::DSL
       raise ArgumentError.new("style name already taken #{name}") if
         @store.include?(name)
       exts = [DEFAULT_KEY]
-      if extends = style.delete(:extend)
-        exts += extends
-      end
+      extends = [style.delete(:extend)].flatten.compact
+      exts += extends unless extends.blank?
       style = exts.inject({}) do |s, e|
         defn = @defs[e] or raise LookupError.new(e.inspect)
         s.deep_merge(defn)

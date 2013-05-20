@@ -42,11 +42,18 @@ describe "Axlsx DSL Styling" do
 
     describe "extends" do
 
-      it "merge in order" do
+      before do
         @style.register :one, :family => 1
         @style.register :two, :font_name => 'Tahoma', :b => true
         @style.register :three, :font_name => 'Helvetica'
+      end
 
+      it "accepts single parent" do
+        @style.register :single, :extend => :three, :b => true
+        @style.defs[:single].should eq({:font_name => 'Helvetica', :b => true})
+      end
+
+      it "accepts array of parents and merge in order" do
         @style.register :four, :extend => [:one, :two, :three], :b => false
         @style.defs[:four].should eq(
           {:family => 1, :font_name => 'Helvetica', :b => false})
