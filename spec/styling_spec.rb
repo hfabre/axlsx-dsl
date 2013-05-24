@@ -158,6 +158,14 @@ describe "Axlsx DSL Styling" do
         })
       end
 
+      it "raises a lookup error if style do exists" do
+        proc do
+          @sheet.row(:style => :wrap) do |r|
+            c = r.cell :style => [:strong, :noexists]
+          end
+        end.should raise_error(Axlsx::DSL::StyleSheet::LookupError)
+      end
+
     end
 
   end

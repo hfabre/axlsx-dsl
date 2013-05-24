@@ -49,9 +49,9 @@ module Axlsx::DSL
 
   protected
 
-    def merge_style(h, extendee)
-      defn = @defs[extendee] or raise LookupError.new(e.inspect)
-      h.deep_merge(defn)
+    def merge_style(style_hash, extendee)
+      defn = @defs[extendee] or raise LookupError.new(extendee.inspect)
+      style_hash.deep_merge(defn)
     end
 
     def store_style(key, style)
