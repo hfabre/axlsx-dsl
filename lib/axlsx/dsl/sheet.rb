@@ -7,7 +7,7 @@ module Axlsx::DSL
     attr_reader :rows
     attr_reader :refs
 
-    delegate :merge_cells, :add_row, :add_image, :name, :name=,
+    delegate :merge_cells, :add_row, :add_image, :name, :name=, :column_widths,
       :to => :@xworksheet
 
     def initialize(xworkbook, stylesheet, options={})
