@@ -27,8 +27,7 @@ module Axlsx::DSL
       extends = [style.delete(:extend)].flatten.compact
       exts += extends unless extends.blank?
       style = exts.inject({}) do |s, e|
-        defn = @defs[e] or raise LookupError.new(e.inspect)
-        s.deep_merge(defn)
+        merge_style(s, e)
       end.deep_merge(style)
       store_style name, style
     end
@@ -50,6 +49,11 @@ module Axlsx::DSL
 
   protected
 
+    def merge_style(h, extendee)
+      defn = @defs[extendee] or raise LookupError.new(e.inspect)
+      h.deep_merge(defn)
+    end
+
     def store_style(key, style)
       @defs[key] = style
       @store[key] = @workbook.styles.add_style(style.deep_dup)
@@ -59,8 +63,7 @@ module Axlsx::DSL
       key = keys.join(SEPARATOR)
       return @store[key] if @store.has_key?(key)
       style = keys.inject({}) do |h, k|
-        s = @defs[k] or raise LookupError.new(k.inspect)
-        h.merge s
+        merge_style(h, k)
       end
       register(key, style)
     end

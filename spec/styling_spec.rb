@@ -132,6 +132,34 @@ describe "Axlsx DSL Styling" do
       end
     end
 
+    describe "dynamic composition" do
+
+      before do
+        @style[:wrap] = {:alignment => { :wrapText => true }}
+        @style[:centered] = {:alignment => {:horizontal => :center}}
+      end
+
+      it "merge the styles" do
+        @sheet.row(:style => :wrap) do |r|
+          c = r.cell :style => [:strong, :centered]
+        end
+
+        style = @sheet.style.defs['wrap+strong+centered']
+        style.should_not be_nil
+        style.should eq({
+          :font_name => 'Tahoma',
+          :family => 1,
+          :numFmt => 1,
+          :alignment => {
+            :wrapText => true,
+            :horizontal => :center
+          },
+          :b => true
+        })
+      end
+
+    end
+
   end
 
 end
