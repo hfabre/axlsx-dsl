@@ -8,6 +8,7 @@ module Axlsx::DSL
     attr_reader :xrow
     attr_reader :cells, :xcells
 
+    delegate :index, :to => :@xrow
     delegate :[], :[]=, :each, :to => :@cells
     include Enumerable
 

@@ -33,6 +33,10 @@ describe "Building Rows" do
       end
     end
 
+    it "has an index" do
+      @row.index.should eq(0)
+    end
+
     describe "cells" do
 
       it "has inspect" do
