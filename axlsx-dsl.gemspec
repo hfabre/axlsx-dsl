@@ -28,5 +28,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec"
 
   spec.add_runtime_dependency "axlsx", ">= 1.3.5"
-  spec.add_runtime_dependency "activesupport", "~> 3.2.11"
+  spec.add_runtime_dependency "activesupport", ">= 3.2.11"
 end
